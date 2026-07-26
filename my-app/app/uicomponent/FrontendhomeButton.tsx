@@ -15,7 +15,7 @@ export default function HomeButton() {
       items-center
       justify-center
       bg-black/55
-      top-[15vh]
+      top-[10vh]
       h-[120vh]
       "
     >
