@@ -1,16 +1,13 @@
+import { getBaseUrl } from "@/lib/utils/getBaseURL";
 import {
   BackendResponse,
   ProductWithImages,
 } from "../types/product";
 
-/* ==============================
-   GET ALL PRODUCTS
-============================== */
-
 const PRODUCTS_API = "/api/product";
 
 export async function getProducts(): Promise<ProductWithImages[]> {
-  const res = await fetch(PRODUCTS_API, {
+  const res = await fetch(`${getBaseUrl()}${PRODUCTS_API}`, {
     cache: "no-store",
   });
 
@@ -28,16 +25,16 @@ export async function getProducts(): Promise<ProductWithImages[]> {
   }));
 }
 
-/* ==============================
-   GET SINGLE PRODUCT
-============================== */
-
 export async function getProductById(
   id: number
-): Promise<ProductWithImages> {
-  const res = await fetch(`/api/product/${id}`, {
+): Promise<ProductWithImages | null> {
+  const res = await fetch(`${getBaseUrl()}/api/product/${id}`, {
     cache: "no-store",
   });
+
+  if (res.status === 404) {
+    return null;
+  }
 
   if (!res.ok) {
     throw new Error("Failed to fetch product");

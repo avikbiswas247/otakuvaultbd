@@ -1,6 +1,8 @@
-import { getProducts } from "@/app/products/services/product";
+import { getProductById } from "@/lib/repositories/product.repository";
 import ProductGallery from "./components/ProductGalery";
 import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 interface Props {
     params: Promise<{
@@ -13,12 +15,13 @@ export default async function ProductDetails({
 }: Props) {
 
     const { id } = await params;
+    const productId = Number(id);
 
-    const products = await getProducts();
+    if (isNaN(productId)) {
+        notFound();
+    }
 
-    const product = products.find(
-        p => p.id === Number(id)
-    );
+    const product = await getProductById(productId);
 
     if (!product) {
         notFound();

@@ -14,6 +14,14 @@ export default function ProductGallery({
 
     const [selected, setSelected] = useState(0);
 
+    if (!images || images.length === 0) {
+        return (
+            <div className="relative h-[500px] border rounded-xl overflow-hidden flex items-center justify-center text-gray-400">
+                No image available
+            </div>
+        );
+    }
+
     return (
 
         <div>

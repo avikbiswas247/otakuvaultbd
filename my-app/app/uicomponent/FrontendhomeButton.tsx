@@ -15,6 +15,8 @@ export default function HomeButton() {
       items-center
       justify-center
       bg-black/55
+      top-[15vh]
+      h-[120vh]
       "
     >
       <div
@@ -25,6 +27,8 @@ export default function HomeButton() {
         sm:px-10
         text-center
         text-white
+        absolute
+        top-[6vh]
         "
       >
         {/* Heading */}
