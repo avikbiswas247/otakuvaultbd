@@ -1,10 +1,16 @@
-import { BackendResponse, ProductWithImages } from "../types/product";
+import {
+  BackendResponse,
+  ProductWithImages,
+} from "../types/product";
 
-const API_URL = "/api/product";
-// change to your backend url
+/* ==============================
+   GET ALL PRODUCTS
+============================== */
+
+const PRODUCTS_API = "/api/product";
 
 export async function getProducts(): Promise<ProductWithImages[]> {
-  const res = await fetch(API_URL, {
+  const res = await fetch(PRODUCTS_API, {
     cache: "no-store",
   });
 
@@ -14,12 +20,28 @@ export async function getProducts(): Promise<ProductWithImages[]> {
 
   const data: BackendResponse = await res.json();
 
-  const merged = data.products.map((product) => ({
+  return data.products.map((product) => ({
     ...product,
     images: data.images.filter(
       (img) => img.product_id === product.id
     ),
   }));
+}
 
-  return merged;
+/* ==============================
+   GET SINGLE PRODUCT
+============================== */
+
+export async function getProductById(
+  id: number
+): Promise<ProductWithImages> {
+  const res = await fetch(`/api/product/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch product");
+  }
+
+  return await res.json();
 }
