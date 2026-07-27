@@ -83,7 +83,7 @@ export default function ProductsPage() {
           {/* Sidebar */}
 
           <aside className="lg:col-span-3">
-            <div className="lg:sticky lg:top-24 fixed">
+            <div className="lg:sticky lg:top-24 ">
               <FilterSidebar
                 search={search}
                 setSearch={setSearch}
