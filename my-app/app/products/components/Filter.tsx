@@ -42,7 +42,7 @@ export default function FilterSidebar({
   sizeList,
 }: Props) {
   return (
-    <div className="border rounded-xl p-5  bg-white dark:bg-black relative  shadow h-fit fixed top-[30vh]">
+    <div className="border rounded-xl p-5  bg-white dark:bg-black relative  shadow h-fit fixed top-[10vh]">
 
       <h2 className="text-2xl font-bold mb-5">
         Filters
