@@ -64,7 +64,7 @@ export default function ProductsPage() {
 
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 
-          <div>
+          <div className="fixed">
             <h1 className="text-3xl md:text-4xl font-bold">
               Products
             </h1>
