@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./uicomponent/themeprovider";
 import Navbar from "./uicomponent/Navbar";
+import { Analytics } from '@vercel/analytics/next';
 
 export default function RootLayout({
   children,
@@ -17,6 +18,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
