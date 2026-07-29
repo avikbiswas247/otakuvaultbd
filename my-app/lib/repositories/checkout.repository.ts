@@ -1,3 +1,4 @@
+// lib/repositories/checkout.repository.ts
 import { db } from "@/lib/db/dbconnect";
 
 /* ==========================================================
@@ -8,10 +9,8 @@ export interface ShippingAddressInput {
   full_name: string;
   phone: string;
   email?: string;
-
   address_line1: string;
   address_line2?: string;
-
   city: string;
   state?: string;
   postal_code: string;
@@ -20,14 +19,7 @@ export interface ShippingAddressInput {
 
 export interface CheckoutInput {
   userId: number;
-
-  paymentMethod:
-    | "COD"
-    | "CARD"
-    | "BKASH"
-    | "NAGAD"
-    | "ROCKET";
-
+  paymentMethod: "COD" | "CARD" | "BKASH" | "NAGAD" | "ROCKET";
   shipping: ShippingAddressInput;
 }
 
@@ -35,9 +27,7 @@ export interface CheckoutInput {
    GET ACTIVE CART
 ========================================================== */
 
-export async function getActiveCart(
-  userId: number
-) {
+export async function getActiveCart(userId: number) {
   const result = await db.query(
     `
     SELECT *
@@ -48,7 +38,6 @@ export async function getActiveCart(
     `,
     [userId]
   );
-
   return result.rows[0] ?? null;
 }
 
@@ -56,36 +45,22 @@ export async function getActiveCart(
    CART ITEMS
 ========================================================== */
 
-export async function getCartItems(
-  orderId: number
-) {
+export async function getCartItems(orderId: number) {
   const result = await db.query(
     `
     SELECT
-
         oi.id,
-
         oi.product_id,
-
         oi.quantity,
-
         p.price,
-
         p.discount,
-
         p.stock
-
     FROM ordered_items oi
-
-    JOIN products p
-
-    ON oi.product_id=p.id
-
+    JOIN products p ON oi.product_id=p.id
     WHERE oi.order_id=$1
     `,
     [orderId]
   );
-
   return result.rows;
 }
 
@@ -101,50 +76,23 @@ export async function createShippingAddress(
   const result = await client.query(
     `
     INSERT INTO shipping_addresses
-    (
-        user_id,
-        full_name,
-        phone,
-        email,
-        address_line1,
-        address_line2,
-        city,
-        state,
-        postal_code,
-        country
-    )
-
-    VALUES
-
-    (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
-    )
-
+    (user_id, full_name, phone, email, address_line1, address_line2, city, state, postal_code, country)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
     RETURNING *
     `,
     [
       userId,
-
       shipping.full_name,
-
       shipping.phone,
-
       shipping.email,
-
       shipping.address_line1,
-
       shipping.address_line2,
-
       shipping.city,
-
       shipping.state,
-
       shipping.postal_code,
-
       shipping.country,
     ]
   );
-
   return result.rows[0];
 }
 
@@ -152,46 +100,20 @@ export async function createShippingAddress(
    CALCULATE TOTAL
 ========================================================== */
 
-export async function calculateCartTotal(
-  client: any,
-  orderId: number
-) {
+export async function calculateCartTotal(client: any, orderId: number) {
   const result = await client.query(
     `
-    SELECT
-
-    COALESCE(
-
+    SELECT COALESCE(
         SUM(
-
-            oi.quantity *
-
-            (
-                p.price -
-
-                (
-                    p.price*p.discount/100
-                )
-
-            )
-
-        ),
-
-        0
-
+            oi.quantity * (p.price - (p.price*p.discount/100))
+        ), 0
     ) total
-
     FROM ordered_items oi
-
-    JOIN products p
-
-    ON oi.product_id=p.id
-
+    JOIN products p ON oi.product_id=p.id
     WHERE oi.order_id=$1
     `,
     [orderId]
   );
-
   return Number(result.rows[0].total);
 }
 
@@ -199,40 +121,17 @@ export async function calculateCartTotal(
    SAVE SNAPSHOT PRICE
 ========================================================== */
 
-export async function saveItemPrices(
-  client: any,
-  orderId: number
-) {
+export async function saveItemPrices(client: any, orderId: number) {
   await client.query(
     `
     UPDATE ordered_items oi
-
     SET
-
         unit_price=p.price,
-
         discount=p.discount,
-
         total_price=
-
-        oi.quantity*
-
-        (
-            p.price-
-            (
-                p.price*p.discount/100
-            )
-        )
-
+            oi.quantity * (p.price - (p.price*p.discount/100))
     FROM products p
-
-    WHERE
-
-        oi.product_id=p.id
-
-        AND
-
-        oi.order_id=$1
+    WHERE oi.product_id=p.id AND oi.order_id=$1
     `,
     [orderId]
   );
@@ -251,31 +150,12 @@ export async function createPayment(
 ) {
   const result = await client.query(
     `
-    INSERT INTO payments
-    (
-        user_id,
-        order_id,
-        payment_method,
-        amount,
-        payment_status
-    )
-
-    VALUES
-
-    (
-        $1,$2,$3,$4,'pending'
-    )
-
+    INSERT INTO payments (user_id, order_id, payment_method, amount, payment_status)
+    VALUES ($1,$2,$3,$4,'pending')
     RETURNING *
     `,
-    [
-      userId,
-      orderId,
-      paymentMethod,
-      amount,
-    ]
+    [userId, orderId, paymentMethod, amount]
   );
-
   return result.rows[0];
 }
 
@@ -293,33 +173,18 @@ export async function completeOrder(
   const result = await client.query(
     `
     UPDATE orders
-
     SET
-
         shipping_address_id=$2,
-
         payment_id=$3,
-
         total_price=$4,
-
         status='placed',
-
         payment_status='pending',
-
         completed_at=NOW()
-
     WHERE id=$1
-
     RETURNING *
     `,
-    [
-      orderId,
-      shippingId,
-      paymentId,
-      total,
-    ]
+    [orderId, shippingId, paymentId, total]
   );
-
   return result.rows[0];
 }
 
@@ -327,130 +192,56 @@ export async function completeOrder(
    CREATE NEW CART
 ========================================================== */
 
-export async function createNewCart(
-  client: any,
-  userId: number
-) {
+export async function createNewCart(client: any, userId: number) {
   const result = await client.query(
-    `
-    INSERT INTO orders
-    (
-        user_id,
-        status
-    )
-
-    VALUES
-
-    (
-        $1,
-        'cart'
-    )
-
-    RETURNING *
-    `,
+    `INSERT INTO orders (user_id, status) VALUES ($1, 'cart') RETURNING *`,
     [userId]
   );
-
   return result.rows[0];
 }
 
 /* ==========================================================
-   MAIN CHECKOUT
+   MAIN CHECKOUT TRANSACTION
 ========================================================== */
 
-export async function checkout(
-  data: CheckoutInput
-) {
+export async function checkout(data: CheckoutInput) {
   const client = await db.connect();
 
   try {
     await client.query("BEGIN");
 
-    const cart = await getActiveCart(
-      data.userId
-    );
+    const cart = await getActiveCart(data.userId);
+    if (!cart) throw new Error("Cart not found");
 
-    if (!cart) {
-      throw new Error("Cart not found");
-    }
-
-    const items = await getCartItems(
-      cart.id
-    );
-
-    if (items.length === 0) {
-      throw new Error("Cart is empty");
-    }
+    const items = await getCartItems(cart.id);
+    if (items.length === 0) throw new Error("Cart is empty");
 
     for (const item of items) {
       if (item.quantity > item.stock) {
-        throw new Error(
-          "Insufficient stock"
-        );
+        throw new Error("Insufficient stock");
       }
     }
 
-    const shipping =
-      await createShippingAddress(
-        client,
-        data.userId,
-        data.shipping
-      );
+    const shipping = await createShippingAddress(client, data.userId, data.shipping);
+    const total = await calculateCartTotal(client, cart.id);
+    await saveItemPrices(client, cart.id);
 
-    const total =
-      await calculateCartTotal(
-        client,
-        cart.id
-      );
+    const payment = await createPayment(client, data.userId, cart.id, data.paymentMethod, total);
+    const order = await completeOrder(client, cart.id, shipping.id, payment.id, total);
 
-    await saveItemPrices(
-      client,
-      cart.id
-    );
-
-    const payment =
-      await createPayment(
-        client,
-        data.userId,
-        cart.id,
-        data.paymentMethod,
-        total
-      );
-
-    const order =
-      await completeOrder(
-        client,
-        cart.id,
-        shipping.id,
-        payment.id,
-        total
-      );
-
+    // Reduce stock
     await client.query(
       `
       UPDATE products p
-
-      SET stock=
-
-      p.stock-oi.quantity
-
+      SET stock = p.stock - oi.quantity
       FROM ordered_items oi
-
-      WHERE
-
-      oi.product_id=p.id
-
-      AND
-
-      oi.order_id=$1
+      WHERE oi.product_id = p.id AND oi.order_id = $1
       `,
       [cart.id]
     );
 
-    await createNewCart(
-      client,
-      data.userId
-    );
+    // Create new empty cart for the user
+    await createNewCart(client, data.userId);
 
     await client.query("COMMIT");
 
@@ -467,4 +258,24 @@ export async function checkout(
   } finally {
     client.release();
   }
+}
+
+/* ==========================================================
+   NEW: GET ORDER ITEMS (for email)
+========================================================== */
+
+export async function getOrderItems(orderId: number) {
+  const result = await db.query(
+    `
+    SELECT 
+      p.name,
+      oi.quantity,
+      (oi.total_price) AS item_total
+    FROM ordered_items oi
+    JOIN products p ON oi.product_id = p.id
+    WHERE oi.order_id = $1
+    `,
+    [orderId]
+  );
+  return result.rows;
 }

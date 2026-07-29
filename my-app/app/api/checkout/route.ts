@@ -1,79 +1,42 @@
+// app/api/checkout/route.ts
 import { NextRequest, NextResponse } from "next/server";
-
 import { verifyAccessToken } from "@/lib/utils/Token";
-
 import {
   checkout,
   ShippingAddressInput,
 } from "@/lib/repositories/checkout.repository";
+import { sendOrderConfirmationEmail } from "@/lib/email";
+import { getOrderItems } from "@/lib/repositories/checkout.repository"; // we'll add this function
 
-export async function POST(
-  request: NextRequest
-) {
+export async function POST(request: NextRequest) {
   try {
     /* ============================
        AUTHENTICATION
     ============================ */
-
-    const accessToken =
-      request.cookies.get("access_token")?.value;
-
+    const accessToken = request.cookies.get("access_token")?.value;
     if (!accessToken) {
-      return NextResponse.json(
-        {
-          message: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const payload = verifyAccessToken(accessToken);
-
     if (!payload) {
-      return NextResponse.json(
-        {
-          message: "Invalid Token",
-        },
-        {
-          status: 401,
-        }
-      );
+      return NextResponse.json({ message: "Invalid Token" }, { status: 401 });
     }
 
     /* ============================
        REQUEST BODY
     ============================ */
-
     const body = await request.json();
-
-    const {
-      paymentMethod,
-      shipping,
-    } = body;
+    const { paymentMethod, shipping } = body;
 
     /* ============================
        VALIDATION
     ============================ */
-
-    if (
-      !paymentMethod ||
-      !shipping
-    ) {
-      return NextResponse.json(
-        {
-          message:
-            "Missing checkout information",
-        },
-        {
-          status: 400,
-        }
-      );
+    if (!paymentMethod || !shipping) {
+      return NextResponse.json({ message: "Missing checkout information" }, { status: 400 });
     }
 
-    const shippingData =
-      shipping as ShippingAddressInput;
+    const shippingData = shipping as ShippingAddressInput;
 
     if (
       !shippingData.full_name ||
@@ -83,63 +46,48 @@ export async function POST(
       !shippingData.postal_code ||
       !shippingData.country
     ) {
-      return NextResponse.json(
-        {
-          message:
-            "Shipping information is incomplete",
-        },
-        {
-          status: 400,
-        }
-      );
+      return NextResponse.json({ message: "Shipping information is incomplete" }, { status: 400 });
     }
 
     /* ============================
        CHECKOUT
     ============================ */
-
     const result = await checkout({
       userId: payload.userId,
       paymentMethod,
       shipping: shippingData,
     });
 
+    /* ============================
+       SEND ORDER CONFIRMATION EMAIL
+    ============================ */
+    const items = await getOrderItems(result.order.id);
+
+    sendOrderConfirmationEmail({
+      to: shippingData.email ?? "",
+      orderId: result.order.id,
+      items,
+      total: result.total,
+      shipping: shippingData,
+      paymentMethod,
+    }).catch((err) => console.error("Email error:", err));
+
     return NextResponse.json(
       {
         success: true,
-
-        message:
-          "Checkout completed successfully",
-
+        message: "Checkout completed successfully",
         order: result.order,
-
         payment: result.payment,
-
         shipping: result.shipping,
-
         total: result.total,
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (error: any) {
-    console.error(
-      "CHECKOUT ERROR:",
-      error
-    );
-
+    console.error("CHECKOUT ERROR:", error);
     return NextResponse.json(
-      {
-        success: false,
-
-        message:
-          error.message ??
-          "Internal Server Error",
-      },
-      {
-        status: 500,
-      }
+      { success: false, message: error.message ?? "Internal Server Error" },
+      { status: 500 }
     );
   }
 }

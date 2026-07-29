@@ -12,7 +12,7 @@ import {
 export default function HeroCarousel() {
   return (
     <Carousel
-      className="w-screen h-[60vh]  md:h-[100vh] md:w-full  sm:h-[100vh] sm:w-full fixed top-[9vh] left-0 right-0 z-0"
+      className="w-screen h-[60vh]  md:h-[100vh] md:w-full  sm:h-[100vh] sm:w-full fixed top-[9.3vh]  left-0 right-0 -z-50"
       opts={{
         align: "start",
         loop: true,

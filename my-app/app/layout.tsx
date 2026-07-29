@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./uicomponent/themeprovider";
 import Navbar from "./uicomponent/Navbar";
-
+import  Footer  from "./uicomponent/Footer";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -12,11 +12,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-        >
+        <ThemeProvider>
+
           <Navbar />
           {children}
+          <Footer/>
         </ThemeProvider>
+           
+        
+       
       </body>
     </html>
   );

@@ -71,3 +71,22 @@ export async function createProduct(
 
   return product.rows[0];
 }
+export async function getRelatedProducts(series: string, excludeId: number, limit: number = 4) {
+  const result = await db.query(
+    `
+    SELECT
+      p.*,
+      (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.is_primary DESC, pi.id ASC LIMIT 1) AS first_image
+    FROM products p
+    WHERE p.series = $1 AND p.id != $2
+    ORDER BY p.id DESC
+    LIMIT $3
+    `,
+    [series, excludeId, limit]
+  );
+  // Transform result rows to include an images array with that single image URL
+  return result.rows.map(row => ({
+    ...row,
+    images: row.first_image ? [row.first_image] : [],
+  }));
+}
