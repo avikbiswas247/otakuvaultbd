@@ -106,10 +106,7 @@ export default function ProfilePage() {
                 <Mail size={16} />
                 <span>{user?.email}</span>
               </div>
-              <div className="mt-3 flex justify-center md:justify-start items-center gap-2 text-sm text-[#C1A68A] dark:text-[#C1A68A]">
-                <Shield size={14} />
-                <span>Member since 2024</span>
-              </div>
+              
             </div>
           </div>
         </div>
