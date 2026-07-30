@@ -131,7 +131,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <p className="text-sm text-[#5F5F5F] dark:text-[#B0B0B0] mb-1">User ID</p>
-                  <p className="font-semibold text-[#171717] dark:text-[#FAFAFA]">#{user?.id}</p>
+                  <p className="font-semibold text-[#171717] dark:text-[#FAFAFA]">{user?.id}</p>
                 </div>
               </div>
             </div>
