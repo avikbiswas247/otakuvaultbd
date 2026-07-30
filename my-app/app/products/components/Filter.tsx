@@ -38,13 +38,11 @@ export default function FilterSidebar({
   typeList,
   sizeList,
 }: Props) {
-  return (
-    <div className="border rounded-xl p-5  bg-white dark:bg-black relative  shadow h-fit sticky top-[30vh]">
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-      <h2 className="text-2xl font-bold mb-5">
-        Filters
-      </h2>
-
+  // Shared filter content
+  const filterContent = (
+    <div className="space-y-6">
       {/* Search */}
       <div>
         <label className="font-semibold text-neutral-900 dark:text-neutral-100">
