@@ -47,12 +47,12 @@ export default function QuickView({
             </p>
 
             <div className="mt-6">
-              <span className="text-3xl font-bold text-red-600">
-                ${discountedPrice.toFixed(2)}
+              <span className="text-3xl font-bold text-white">
+                BDT{discountedPrice.toFixed(2)}
               </span>
 
               <span className="line-through text-gray-400 ml-4">
-                ${product.price}
+                BDT{product.price}
               </span>
             </div>
 

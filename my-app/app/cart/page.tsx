@@ -93,7 +93,7 @@ export default function CartPage() {
 
                   <div className="flex justify-between text-xl font-bold text-[#171717] dark:text-[#FAFAFA]">
                     <span>Total</span>
-                    <span>৳{total.toFixed(2)}</span>
+                    <span>BDT{total.toFixed(2)}</span>
                   </div>
                 </div>
 

@@ -79,7 +79,7 @@ export default async function ProductDetails({ params }: Props) {
             {/* Price Block */}
             <div className="mt-6 flex items-center gap-4 flex-wrap">
               <span className="text-3xl sm:text-4xl font-bold text-[#171717] dark:text-[#FAFAFA]">
-                ৳{discounted.toFixed(2)}
+                BDT{discounted.toFixed(2)}
               </span>
               {product.discount > 0 && (
                 <span className="text-lg sm:text-xl line-through text-[#9CA3AF] dark:text-[#6B7280]">

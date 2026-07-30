@@ -66,7 +66,7 @@ export default function WishlistCard({ item }: Props) {
         <div className="flex items-center justify-between">
 
           <span className="font-bold text-xl">
-            ${Number(item.price).toFixed(2)}
+            {Number(item.price).toFixed(2)}
           </span>
 
           <div className="flex items-center gap-1">

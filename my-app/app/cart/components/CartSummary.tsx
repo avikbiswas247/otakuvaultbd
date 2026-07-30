@@ -52,7 +52,7 @@ export default function CartSummary({
         <div className="border-t pt-4 flex justify-between text-xl font-bold">
           <span>Total</span>
 
-          <span>${total.toFixed(2)}</span>
+          <span>BDT{total.toFixed(2)}</span>
         </div>
 
       </div>
