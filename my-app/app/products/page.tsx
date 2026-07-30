@@ -64,7 +64,7 @@ export default function ProductsPage() {
 
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 
-          <div>
+          <div >
             <h1 className="text-3xl md:text-4xl font-bold">
               Products
             </h1>
@@ -83,7 +83,7 @@ export default function ProductsPage() {
           {/* Sidebar */}
 
           <aside className="lg:col-span-3">
-            <div className="lg:sticky lg:top-24">
+            <div className="lg:sticky lg:top-24 ">
               <FilterSidebar
                 search={search}
                 setSearch={setSearch}
