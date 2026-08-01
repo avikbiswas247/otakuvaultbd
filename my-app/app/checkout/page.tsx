@@ -286,7 +286,7 @@ export default function CheckoutPage() {
                             </p>
                           </div>
                           <div className="text-sm font-semibold text-[#171717] dark:text-[#FAFAFA]">
-                            ৳{(discountedPrice * item.quantity).toFixed(2)}
+                            BDT{(discountedPrice * item.quantity).toFixed(2)}
                           </div>
                         </div>
                       );
@@ -296,7 +296,7 @@ export default function CheckoutPage() {
                   <div className="border-t border-[#E6E3DE] dark:border-gray-700 mt-6 pt-6 space-y-2">
                     <div className="flex justify-between text-sm text-[#5F5F5F] dark:text-[#B0B0B0]">
                       <span>Subtotal</span>
-                      <span>৳{total.toFixed(2)}</span>
+                      <span>BDT{total.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm text-[#5F5F5F] dark:text-[#B0B0B0]">
                       <span>Shipping</span>
@@ -306,7 +306,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex justify-between text-xl font-bold text-[#171717] dark:text-[#FAFAFA] pt-2">
                       <span>Total</span>
-                      <span>৳{total.toFixed(2)}</span>
+                      <span>{total.toFixed(2)}</span>
                     </div>
                   </div>
 

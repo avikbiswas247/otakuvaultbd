@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/admin/api/send-code"  ],
   "exclude": ["node_modules"]
 }

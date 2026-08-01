@@ -304,3 +304,34 @@ export async function getOrderById(orderId: number) {
   );
   return result.rows[0] ?? null;
 }
+export async function getProductById(id: number) {
+  const result = await db.query(
+    `
+SELECT
+p.*,
+COALESCE(
+json_agg(
+json_build_object(
+'id',pi.id,
+'image_url',pi.image_url,
+'public_id',pi.public_id
+)
+ORDER BY pi.id
+) FILTER (WHERE pi.id IS NOT NULL),
+'[]'
+) AS images
+
+FROM products p
+
+LEFT JOIN product_images pi
+ON pi.product_id=p.id
+
+WHERE p.id=$1
+
+GROUP BY p.id;
+`,
+    [id]
+  );
+
+  return result.rows[0];
+}

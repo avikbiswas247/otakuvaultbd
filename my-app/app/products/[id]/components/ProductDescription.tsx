@@ -16,20 +16,9 @@ return(
 
 <div
 className="
-mt-20
 "
 >
 
-<h1
-className="
-text-3xl
-font-bold
-"
->
-
-Description
-
-</h1>
 
 
 <p

@@ -22,7 +22,7 @@ export default function ProductCard({ product }: Props) {
 
   const image =
     product.images.length > 0
-      ? product.images[0].image_url
+      ? product.images[0]?.image_url
       : "/placeholder.png";
 
   return (

@@ -1,18 +1,14 @@
 import { db } from "@/lib/db/dbconnect";
 import { getproduct } from "@/types/product";
 
-/* ==============================
-   GET ALL PRODUCTS
-============================== */
+/* GET ALL PRODUCTS*/
 
 export async function getProducts() {
   const result = await db.query("SELECT * FROM Products");
   return result.rows;
 }
 
-/* ==============================
-   GET SINGLE PRODUCT (with images)
-============================== */
+/* GET SINGLE PRODUCT (with images)*/
 
 export async function getProductById(id: number) {
   const result = await db.query(
@@ -44,9 +40,7 @@ export async function getProductById(id: number) {
   return result.rows[0] ?? null;
 }
 
-/* ==============================
-   CREATE PRODUCT
-============================== */
+/* CREATE PRODUCT*/
 
 export async function createProduct(
   name: string,

@@ -19,6 +19,7 @@ export interface ProductImage {
   image_url: string;
   public_id: string;
   is_primary: boolean;
+  primary_image_index: number;
 }
 
 export interface BackendResponse {

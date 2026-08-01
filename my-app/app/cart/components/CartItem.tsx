@@ -42,7 +42,7 @@ export default function CartItem({ item, refresh }: CartItemProps) {
             </span>
             {discount > 0 && (
               <span className="text-sm line-through text-[#9CA3AF] dark:text-[#6B7280]">
-                ৳{price.toFixed(2)}
+                BDT{price.toFixed(2)}
               </span>
             )}
           </div>

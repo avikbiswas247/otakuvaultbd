@@ -81,7 +81,7 @@ export default function WishlistCard({ item }: Props) {
 
         <div className="flex gap-3">
 
-          <Button className="flex-1">
+          <Button className="flex-1  bg-violet-500 text-white hover:bg-violet-600 ">
             <ShoppingCart className="mr-2 h-4 w-4" />
             Add to Cart
           </Button>
