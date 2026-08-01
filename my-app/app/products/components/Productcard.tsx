@@ -102,9 +102,7 @@ export default function ProductCard({ product }: Props) {
 
             {/* Wishlist */}
 
-            <div className="absolute right-4 top-4 z-20">
-              <WishlistButton productId={product.id} />
-            </div>
+            
 
             {/* Hover Buttons */}
 
