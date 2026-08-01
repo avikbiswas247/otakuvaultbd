@@ -53,7 +53,7 @@ export default async function ProductDetails({ params }: Props) {
         
         <ProductReview reviews={reviews} />
 
-        {relatedProducts.length > 0 && (
+        {/* {relatedProducts.length > 0 && (
           <section className="mt-20">
             <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white relative after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-violet-500 after:rounded-full pb-4 mb-10">
               You May Also Like
@@ -75,7 +75,7 @@ export default async function ProductDetails({ params }: Props) {
               ))}
             </div>
           </section>
-        )}
+        )} */}
       </div>
     </div>
   );
