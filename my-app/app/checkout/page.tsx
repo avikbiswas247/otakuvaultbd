@@ -225,7 +225,7 @@ export default function CheckoutPage() {
                 Payment Method
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {["COD", "BKASH", "NAGAD", "ROCKET"].map((method) => (
+                {["COD"].map((method) => (
                   <button
                     key={method}
                     type="button"

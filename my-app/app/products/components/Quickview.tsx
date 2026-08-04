@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ProductWithImages } from "../types/product";
-
+import {addToCart} from "@/app/cart/service/cart";
 interface Props {
   product: ProductWithImages | null;
   onClose: () => void;
@@ -65,6 +65,13 @@ export default function QuickView({
             </div>
 
             <button
+             onClick={async () => {
+                          const res = await addToCart(product.id);
+            
+                          if (res.ok) {
+                            alert("Added to Cart");
+                          }
+                        }}
               className="mt-8 bg-black text-white px-8 py-3 rounded-lg hover:bg-gray-800"
             >
               Add To Cart

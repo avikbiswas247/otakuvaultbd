@@ -16,7 +16,7 @@ export default function Logo() {
   if (!mounted) {
     return (
       <Image
-        src="/images/logo_2-removebg-preview new.png"
+        src="/images/otakuvaultdarkmode-Photoroom.png"
         alt="Otaku Vault"
         width={180}
         height={60}
@@ -29,8 +29,8 @@ export default function Logo() {
     <Image
       src={
         resolvedTheme === "dark"
-          ? "/images/logo_2-removebg-preview.png"
-          : "/images/logo_2-removebg-preview new.png"
+          ? "/images/otakuvaultlightmode-Photoroom.png"
+          : "/images/otakuvaultdarkmode-Photoroom.png"
       }
       alt="Otaku Vault"
       width={180}
