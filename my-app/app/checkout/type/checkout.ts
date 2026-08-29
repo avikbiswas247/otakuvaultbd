@@ -9,11 +9,13 @@ export interface ShippingAddress {
   state?: string;
   postal_code: string;
   country: string;
+  bkashNumber: string;
 }
 
 export interface CheckoutRequest {
   paymentMethod: "COD" | "CARD" | "BKASH" | "NAGAD" | "ROCKET";
   shipping: ShippingAddress;
+
 }
 
 export interface CheckoutResponse {
@@ -23,4 +25,5 @@ export interface CheckoutResponse {
   order: any;
   payment: any;
   shipping: any;
+  bkashNumber: string;
 }

@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
     "/api/auth/change-email",
     "/api/auth/change-username",
     "/api/auth/change-password",
-
+"api/cart",
     "/api/cart/:path*",
 "/api/auth/:path*",
     "/api/cart/:path*",

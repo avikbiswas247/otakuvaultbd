@@ -88,9 +88,7 @@ export default async function OrdersPage() {
                     <span className="text-xl font-bold text-[#171717] dark:text-[#FAFAFA]">
                       ৳{Number(order.total_amount).toFixed(2)}
                     </span>
-                    <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                      Completed
-                    </span>
+                    
                   </div>
                 </div>
 

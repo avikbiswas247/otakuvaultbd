@@ -15,6 +15,7 @@ export interface ShippingAddressInput {
   state?: string;
   postal_code: string;
   country: string;
+  bkashNumber: string;
 }
 
 export interface CheckoutInput {
@@ -76,8 +77,8 @@ export async function createShippingAddress(
   const result = await client.query(
     `
     INSERT INTO shipping_addresses
-    (user_id, full_name, phone, email, address_line1, address_line2, city, state, postal_code, country)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+    (user_id, full_name, phone, email, address_line1, address_line2, city, state, postal_code, country, bkash_number)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
     RETURNING *
     `,
     [
@@ -91,6 +92,7 @@ export async function createShippingAddress(
       shipping.state,
       shipping.postal_code,
       shipping.country,
+      shipping.bkashNumber,
     ]
   );
   return result.rows[0];
