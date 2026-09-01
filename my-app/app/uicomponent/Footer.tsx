@@ -54,7 +54,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               {/* Facebook */}
               <a
-                href="#"
+                href="https://web.facebook.com/otakuvaultbd01"
                 className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E6E3DE] dark:border-gray-600 text-[#5F5F5F] dark:text-[#B0B0B0] hover:border-[#8B5CF6] hover:text-[#8B5CF6] hover:bg-[#F7F5FF] dark:hover:bg-violet-900/20 transition-all duration-300"
                 aria-label="Facebook"
               >
@@ -64,7 +64,7 @@ export default function Footer() {
               </a>
               {/* Instagram */}
               <a
-                href="#"
+                href="https://www.instagram.com/otakuvaultbd/?hl=en"
                 className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E6E3DE] dark:border-gray-600 text-[#5F5F5F] dark:text-[#B0B0B0] hover:border-[#8B5CF6] hover:text-[#8B5CF6] hover:bg-[#F7F5FF] dark:hover:bg-violet-900/20 transition-all duration-300"
                 aria-label="Instagram"
               >

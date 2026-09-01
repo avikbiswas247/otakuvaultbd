@@ -241,8 +241,8 @@ export default function AboutPage() {
           </p>
           <div className="flex justify-center gap-6 pt-2">
             {[
-              { href: "#", label: "Facebook", color: "hover:bg-[#1877f2]" },
-              { href: "#", label: "Instagram", color: "hover:bg-[#e1306c]" },
+              { href: "https://web.facebook.com/otakuvaultbd01", label: "Facebook", color: "hover:bg-[#1877f2]" },
+              { href: "https://www.instagram.com/otakuvaultbd/?hl=en", label: "Instagram", color: "hover:bg-[#e1306c]" },
               { href: "#", label: "YouTube", color: "hover:bg-[#ff0000]" },
             ].map((s) => (
               <a
