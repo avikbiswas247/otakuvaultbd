@@ -4,6 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import { mergeGuestCartIntoServer } from "@/app/cart/service/cart";
+import {
+  invalidateAuthCache,
+} from "@/lib/auth/client-auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -46,9 +50,28 @@ export default function LoginPage() {
         return;
       }
 
-      // Navigate to /profile — the profile layout will trigger
-      // a router.refresh() + custom event to update the navbar instantly.
-      router.push("/profile");
+      invalidateAuthCache();
+
+      // Merge the guest cart (if any) into the server-side cart.
+      await mergeGuestCartIntoServer();
+
+      // Notify the navbar that auth state changed.
+      window.dispatchEvent(new Event("auth-state-changed"));
+
+      // Respect a safe redirect param (e.g. /login?redirect=/checkout).
+      let redirect = "/profile";
+      try {
+        const param = new URLSearchParams(
+          window.location.search
+        ).get("redirect");
+        if (param && param.startsWith("/") && !param.startsWith("//")) {
+          redirect = param;
+        }
+      } catch {
+        // fall back to /profile
+      }
+
+      router.push(redirect);
     } catch (err) {
       setError("Unable to connect to the server.");
     } finally {

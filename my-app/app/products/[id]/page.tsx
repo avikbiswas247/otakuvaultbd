@@ -1,5 +1,6 @@
 // app/products/[id]/page.tsx
 import { getProductById, getRelatedProducts } from "@/lib/repositories/product.repository";
+import { getReviewsByProductId, getReviewStatsByProductId } from "@/lib/repositories/review.repository";
 import { notFound } from "next/navigation";
 import ProductGallery from "./components/ProductGalery";
 import ProductInformation from "./components/ProductInformation";
@@ -29,12 +30,18 @@ export default async function ProductDetails({ params }: Props) {
     relatedProducts = [];
   }
 
-  // Map reviews if your product has them
-  const reviews = product.reviews?.map((r: any) => ({
-    username: r.user?.name || "Anonymous",
-    comment: r.comment,
-    rating: r.rating,
-  })) || [];
+  // Fetch reviews + stats for this product
+  let reviews: any[] = [];
+  let stats = { average: 0, count: 0 };
+  try {
+    [reviews, stats] = await Promise.all([
+      getReviewsByProductId(productId),
+      getReviewStatsByProductId(productId),
+    ]);
+  } catch {
+    reviews = [];
+    stats = { average: 0, count: 0 };
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
@@ -51,7 +58,7 @@ export default async function ProductDetails({ params }: Props) {
         </div>
 
         
-        <ProductReview reviews={reviews} />
+        <ProductReview productId={productId} reviews={reviews} stats={stats} />
 
         {/* {relatedProducts.length > 0 && (
           <section className="mt-20">

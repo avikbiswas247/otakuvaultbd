@@ -15,6 +15,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./Themetoggle";
+import { isLoggedIn as checkAuth, invalidateAuthCache } from "@/lib/auth/client-auth";
+import { getGuestCartCount } from "@/app/cart/guest/guestCart";
 
 import {
   NavigationMenu,
@@ -69,6 +71,11 @@ export default function Navbar() {
   }
 
   async function fetchCartCount() {
+    const authed = await checkAuth();
+    if (!authed) {
+      setCartCount(getGuestCartCount());
+      return;
+    }
     try {
       const res = await fetch("/api/cart/count", { credentials: "include" });
       if (!res.ok) {
@@ -86,9 +93,11 @@ export default function Navbar() {
   async function logout() {
     try {
       await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      invalidateAuthCache();
       setUser(null);
       setIsLoggedIn(false);
       setCartCount(0);
+      window.dispatchEvent(new Event("auth-state-changed"));
       router.push("/login");
       router.refresh();
     } catch (error) {
@@ -108,6 +117,7 @@ export default function Navbar() {
     const interval = setInterval(() => fetchCartCount(), 3000);
     const updateCart = () => fetchCartCount();
     const handleAuthChange = () => {
+      invalidateAuthCache();
       fetchCurrentUser();
       fetchCartCount();
     };

@@ -1,7 +1,7 @@
 // app/checkout/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import {
   Copy,
 } from "lucide-react";
 import { toast } from "sonner";
+import { isLoggedIn } from "@/lib/auth/client-auth";
 
 const BKASH_NUMBER = "01714546809";
 
@@ -32,9 +33,6 @@ export default function CheckoutPage() {
 
   const [form, setForm] = useState<CheckoutRequest>({
     paymentMethod: "COD",
-
-    // bKash number used by the customer to pay delivery fee
-  
 
     shipping: {
       full_name: "",
@@ -61,12 +59,21 @@ export default function CheckoutPage() {
   const grandTotal = total + shippingFee;
 
   useEffect(() => {
+    // Guest checkout guard: if not logged in, bounce to login.
+    async function guard() {
+      const authed = await isLoggedIn();
+      if (!authed) {
+        router.replace("/login?redirect=/checkout");
+        return;
+      }
+    }
+
     async function loadCart() {
+      const authed = await isLoggedIn();
+      if (!authed) return; // guard handles redirect
+
       try {
-        const [items, tot] = await Promise.all([
-          getCart(),
-          getCartTotal(),
-        ]);
+        const [items, tot] = await Promise.all([getCart(), getCartTotal()]);
 
         setCartItems(items);
         setTotal(tot.total);
@@ -77,6 +84,7 @@ export default function CheckoutPage() {
       }
     }
 
+    guard();
     loadCart();
   }, []);
 
@@ -102,7 +110,7 @@ export default function CheckoutPage() {
     }
   };
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (cartItems.length === 0) {
@@ -116,7 +124,7 @@ export default function CheckoutPage() {
     }
 
     // Validate bKash number
-    if (!form.bkashNumber.trim()) {
+    if (!form.shipping.bkashNumber.trim()) {
       toast.error("Please enter the bKash number you used for payment.");
       return;
     }
@@ -124,7 +132,7 @@ export default function CheckoutPage() {
     // Bangladesh bKash number validation
     const bkashRegex = /^01[3-9]\d{8}$/;
 
-    if (!bkashRegex.test(form.bkashNumber.trim())) {
+    if (!bkashRegex.test(form.shipping.bkashNumber.trim())) {
       toast.error("Please enter a valid Bangladeshi mobile number.");
       return;
     }
@@ -456,16 +464,13 @@ export default function CheckoutPage() {
                           inputMode="numeric"
                           required
                           maxLength={11}
-                          value={form.bkashNumber}
+                          value={form.shipping.bkashNumber}
                           onChange={(e) => {
                             const value = e.target.value
                               .replace(/\D/g, "")
                               .slice(0, 11);
 
-                            setForm((prev) => ({
-                              ...prev,
-                              bkashNumber: value,
-                            }));
+                            updateShipping("bkashNumber", value);
                           }}
                           placeholder="01XXXXXXXXX"
                           className="w-full rounded-xl border border-pink-200 dark:border-pink-900/50 bg-white dark:bg-black px-4 py-3 text-[#171717] dark:text-[#FAFAFA] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow"
@@ -512,10 +517,10 @@ export default function CheckoutPage() {
 
                       return (
                         <div
-                          key={item.cart_item_id}
+                          key={item.cart_item_id ?? item.id}
                           className="flex gap-3"
                         >
-                          <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-neutral-100 dark:bg-gray-800 flex-shrink-0">
+                          <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-neutral-100 dark:bg-gray-800 shrink-0">
                             <Image
                               src={
                                 item.image_url ||

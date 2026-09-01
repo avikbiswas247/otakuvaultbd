@@ -6,10 +6,12 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import { getCart, getCartTotal } from "./service/cart";
 import { CartItem as CartItemType } from "./type/cart";
 import CartItemCard from "./components/CartItem";
+import { isLoggedIn } from "@/lib/auth/client-auth";
 
 export default function CartPage() {
   const [items, setItems] = useState<CartItemType[]>([]);
   const [total, setTotal] = useState(0);
+  const [authed, setAuthed] = useState(true); // assume authed until checked
 
   async function loadCart() {
     const products = await getCart();
@@ -19,6 +21,7 @@ export default function CartPage() {
   }
 
   useEffect(() => {
+    isLoggedIn().then(setAuthed);
     loadCart();
   }, []);
 
@@ -62,7 +65,7 @@ export default function CartPage() {
             <div className="space-y-5 lg:col-span-2">
               {items.map((item) => (
                 <CartItemCard
-                  key={item.cart_item_id}
+                  key={item.cart_item_id ?? item.id}
                   item={item}
                   refresh={loadCart}
                 />
@@ -98,12 +101,17 @@ export default function CartPage() {
                 </div>
 
                 <Link
-                  href="/checkout"
+                  href={authed ? "/checkout" : "/login?redirect=/checkout"}
                   className="mt-8 w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#8B5CF6] text-white font-semibold rounded-xl shadow-lg shadow-violet-200/30 dark:shadow-violet-900/20 hover:bg-[#7C3AED] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                 >
-                  Proceed to Checkout
+                  {authed ? "Proceed to Checkout" : "Login to Checkout"}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
+                {!authed && (
+                  <p className="mt-2 text-center text-sm text-[#5F5F5F] dark:text-[#B0B0B0]">
+                    You&apos;ll be redirected to login, then return to checkout.
+                  </p>
+                )}
 
                 <Link
                   href="/products"

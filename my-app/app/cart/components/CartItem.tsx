@@ -58,7 +58,7 @@ export default function CartItem({ item, refresh }: CartItemProps) {
             <button
               onClick={async () => {
                 if (item.quantity > 1) {
-                  await updateQuantity(item.cart_item_id, item.quantity - 1);
+                  await updateQuantity(item.cart_item_id ?? item.id, item.quantity - 1);
                   refresh();
                 }
               }}
@@ -74,7 +74,7 @@ export default function CartItem({ item, refresh }: CartItemProps) {
 
             <button
               onClick={async () => {
-                await updateQuantity(item.cart_item_id, item.quantity + 1);
+                await updateQuantity(item.cart_item_id ?? item.id, item.quantity + 1);
                 refresh();
               }}
               className="w-8 h-8 flex items-center justify-center rounded-lg border border-[#E6E3DE] dark:border-gray-600 text-[#171717] dark:text-[#FAFAFA] hover:border-[#8B5CF6] hover:text-[#8B5CF6] hover:bg-[#F7F5FF] dark:hover:bg-violet-900/20 transition-all duration-200"
@@ -86,7 +86,7 @@ export default function CartItem({ item, refresh }: CartItemProps) {
           {/* Remove button */}
           <button
             onClick={async () => {
-              await removeCartItem(item.cart_item_id);
+              await removeCartItem(item.cart_item_id ?? item.id);
               refresh();
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-500/80 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-all duration-200"

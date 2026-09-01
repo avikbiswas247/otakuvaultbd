@@ -40,6 +40,47 @@ export async function getProductById(id: number) {
   return result.rows[0] ?? null;
 }
 
+/* GET PRODUCTS BY IDS (batch) */
+
+export async function getProductsByIds(ids: number[]) {
+  if (ids.length === 0) return [];
+  const result = await db.query(
+    `
+    SELECT
+      p.id,
+      p.name,
+      p.description,
+      p.price,
+      p.discount,
+      p.stock,
+      p.series,
+      p.size,
+      p.type,
+      p.rating,
+      COALESCE(
+        (
+          SELECT json_agg(
+            json_build_object(
+              'id', pi.id,
+              'product_id', pi.product_id,
+              'image_url', pi.image_url,
+              'public_id', pi.public_id
+            )
+            ORDER BY pi.is_primary DESC, pi.id ASC
+          )
+          FROM product_images pi
+          WHERE pi.product_id = p.id
+        ),
+        '[]'::json
+      ) AS images
+    FROM products p
+    WHERE p.id = ANY($1::int[])
+    `,
+    [ids]
+  );
+  return result.rows;
+}
+
 /* CREATE PRODUCT*/
 
 export async function createProduct(
